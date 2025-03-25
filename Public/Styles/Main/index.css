@@ -1,0 +1,120 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: var(--color-neutral-secondary);
+	display: grid;
+	height: 100vh;
+	padding: 2rem;
+	gap: 1rem;
+	font-family: 'Poppins', sans-serif;
+}
+
+div.console {
+	text-align: left;
+	width: 38ch;
+	/* overflow: hidden; */
+	/* height: fit-content; */
+	
+}
+
+.console h1 {
+	color: var(--color-secondary);
+}
+
+.console p {
+	color: var(--color-secondary);
+	margin-bottom: 1rem;
+}
+
+.console code {
+	display: block;
+	background-color: var(--color-neutral);
+	color: var(--color-secondary);
+	padding: 1rem;
+	border-radius: 4px;
+	margin: 4px 0;
+
+}
+
+.console code span {
+	vertical-align: middle;
+	display: inline-block;
+	width: 33ch;
+	text-wrap: nowrap;
+	overflow: hidden;
+	animation: typing 3s steps(33) infinite alternate-reverse;
+}
+
+@keyframes typing {
+	from {
+		width: 0ch;
+	}
+}
+
+.widgets {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	background-color: var(--color-background);
+	gap: 1rem;
+	border-radius: 4px;
+	padding: 1rem .5rem;
+	/* margin: 0 auto; */
+	/* max-width:80rem; */
+}
+
+.widget {
+	max-width: 22rem;
+	width: 100%;
+	border: 1px solid var(--color-border);
+	border-radius: 1rem;
+	padding: 1.25rem;
+	background: white;
+	cursor: pointer;
+	height: fit-content;
+	transition: all 0.2s ease;
+}
+
+.widget--higlighted {
+	border: 1px solid var(--color-neutral-secondary);
+	background: var(--color-neutral);
+	color: var(--color-secondary);
+}
+
+.widget:hover {
+	border: 1px solid var(--color-primary);
+}
+
+.widget header {
+	display: flex;
+	justify-content: space-between;
+	font-size: 1.35rem;
+	margin-bottom: 1rem;
+}
+
+.widget__numbers {
+	display: flex;
+	align-items: center;
+	justify-content: start;
+	flex-wrap: wrap;
+	font-size: 1.5rem;
+	margin-top: 1rem;
+	font-weight: 700;
+	gap: .5rem 1rem;
+}
+
+.widget__numbers .trend{
+	display: flex;
+	color: var(--color-primary);
+	background: white;
+	font-size: 1.25rem;
+	border: 1px solid var(--color-border);
+	padding: .25rem 1rem;
+	align-items: center;
+	border-radius: 4rem;
+	gap: .25rem;
+}
