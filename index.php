@@ -33,13 +33,13 @@ define('URL_SEPARATOR', '/');
 
 define('MVC_DIR_CORE', MVC_DIR_ROOT . DIRECTORY_SEPARATOR . 'Core');
 define('MVC_DIR_APP', MVC_DIR_ROOT . DIRECTORY_SEPARATOR . 'Application');
+define('MVC_DIR_LIBRARIES', MVC_DIR_ROOT . DIRECTORY_SEPARATOR . 'Libraries');
 define('MVC_DIR_PUBLIC', 'Public');
 
 /**
  *
  * CORE DEFINITIONS
  */
-define('MVC_DIR_CORE_DATA', MVC_DIR_CORE . DIRECTORY_SEPARATOR . 'Data');
 define('MVC_DIR_CORE_INTERFACES', MVC_DIR_CORE . DIRECTORY_SEPARATOR . 'Interfaces');
 define('MVC_DIR_CORE_NOMENCLATURES', MVC_DIR_CORE . DIRECTORY_SEPARATOR . 'Nomenclatures');
 
@@ -49,15 +49,10 @@ define('MVC_DIR_CORE_NOMENCLATURES', MVC_DIR_CORE . DIRECTORY_SEPARATOR . 'Nomen
  */
 define('MVC_DIR_APP_CONTROLLERS', MVC_DIR_APP . DIRECTORY_SEPARATOR . 'Controllers');  // Application Controllers
 define('MVC_DIR_APP_DATA', MVC_DIR_APP . DIRECTORY_SEPARATOR . 'Data');                // Application Configurations
-define('MVC_DIR_APP_LIBRARIES', MVC_DIR_APP . DIRECTORY_SEPARATOR . 'Libraries');      // 3th Party Libraries
 define('MVC_DIR_APP_MODELS', MVC_DIR_APP . DIRECTORY_SEPARATOR . 'Models');            // Application Models
 define('MVC_DIR_APP_VIEWS', MVC_DIR_APP . DIRECTORY_SEPARATOR . 'Views');              // Application Views
 define('MVC_DIR_APP_HELPERS', MVC_DIR_APP . DIRECTORY_SEPARATOR . 'Helpers');          // Helpers & View Helpers
 define('MVC_DIR_APP_LOGIC', MVC_DIR_APP . DIRECTORY_SEPARATOR . 'Logic');              // Business Logic
-
-//Add by Victor
-define('MVC_DIR_APP_TOOLS', MVC_DIR_APP . DIRECTORY_SEPARATOR . 'Tools');
-
 define('MVC_DIR_APP_VIEWS_SHARED', MVC_DIR_APP_VIEWS . DIRECTORY_SEPARATOR . 'Shared');
 
 /**
@@ -135,42 +130,42 @@ final class index extends Core\FrontController {
 	 * @internal The Auto Class Loader feature only work for classes in to the
 	 *           folder list:
 	 *              MVC_DIR_CORE
-	 *              MVC_DIR_CORE_DATA
 	 *              MVC_DIR_CORE_INTERFACES
 	 *              MVC_DIR_CORE_NOMENCLATURES
 	 *              MVC_DIR_APP_CONTROLLERS
 	 *              MVC_DIR_APP_LIBRARIES
 	 *              MVC_DIR_APP_MODELS
 	 * @ignore
-	 * @param type $className
+	 * @param string $className
 	 */
-	private function loader($className) {
+	private function loader(string $className): void
+	{
+		$parts = explode('\\', $className);
+		$className = end($parts);
 
-		$className = explode("\\", $className);
-		$className = $className[count($className)-1];
+		$paths = [
+			MVC_DIR_CORE,
+			MVC_DIR_CORE_INTERFACES,
+			MVC_DIR_CORE_NOMENCLATURES,
+			MVC_DIR_LIBRARIES,
+			MVC_DIR_APP_CONTROLLERS,
+			MVC_DIR_APP_MODELS,
+			MVC_DIR_APP_HELPERS,
+			MVC_DIR_APP_LOGIC,
+			MVC_DIR_APP,
+		];
 
-		if (is_file(MVC_DIR_CORE . DIRECTORY_SEPARATOR . $className . '.php'))
-			require_once MVC_DIR_CORE . DIRECTORY_SEPARATOR . $className . '.php';
-		else if (is_file(MVC_DIR_CORE_DATA . DIRECTORY_SEPARATOR . $className . '.php'))
-			require_once MVC_DIR_CORE_DATA . DIRECTORY_SEPARATOR . $className . '.php';
-		else if (is_file(MVC_DIR_CORE_INTERFACES . DIRECTORY_SEPARATOR . $className . '.php'))
-			require_once MVC_DIR_CORE_INTERFACES . DIRECTORY_SEPARATOR . $className . '.php';
-		else if (is_file(MVC_DIR_CORE_NOMENCLATURES . DIRECTORY_SEPARATOR . $className . '.php'))
-			require_once MVC_DIR_CORE_NOMENCLATURES . DIRECTORY_SEPARATOR . $className . '.php';
-		else if (is_file(MVC_DIR_APP_CONTROLLERS . DIRECTORY_SEPARATOR . $className . '.php'))
-			require_once MVC_DIR_APP_CONTROLLERS . DIRECTORY_SEPARATOR . $className . '.php';
-		else if (is_file(MVC_DIR_APP_LIBRARIES . DIRECTORY_SEPARATOR . $className . '.php'))
-			require_once MVC_DIR_APP_LIBRARIES . DIRECTORY_SEPARATOR . $className . '.php';
-		else if (is_file(MVC_DIR_APP_MODELS . DIRECTORY_SEPARATOR . $className . '.php'))
-			require_once MVC_DIR_APP_MODELS . DIRECTORY_SEPARATOR . $className . '.php';
-		else if (is_file(MVC_DIR_APP_HELPERS . DIRECTORY_SEPARATOR . $className . '.php'))
-			require_once MVC_DIR_APP_HELPERS . DIRECTORY_SEPARATOR . $className . '.php';
-		else if (is_file(MVC_DIR_APP_LOGIC . DIRECTORY_SEPARATOR . $className . '.php'))
-			require_once MVC_DIR_APP_LOGIC . DIRECTORY_SEPARATOR . $className . '.php';
+		foreach ($paths as $path) {
+			$file = $path . DIRECTORY_SEPARATOR . $className . '.php';
 
+			if (is_file($file)) {
+				require_once $file;
+				break;
+			}
+		}
+		
 		if (is_file(MVC_DIR_APP . DIRECTORY_SEPARATOR . $className . '.php'))
-			require_once MVC_DIR_APP . DIRECTORY_SEPARATOR . $className . '.php';
-
+		require_once MVC_DIR_APP . DIRECTORY_SEPARATOR . $className . '.php';
 	}
 
 	/**
